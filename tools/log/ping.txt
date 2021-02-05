@@ -1,0 +1,10 @@
+PING 192.168.43.37 (192.168.43.37) 56(84) bytes of data.
+64 bytes from 192.168.43.37: icmp_seq=1 ttl=64 time=1196 ms
+64 bytes from 192.168.43.37: icmp_seq=2 ttl=64 time=196 ms
+64 bytes from 192.168.43.37: icmp_seq=3 ttl=64 time=615 ms
+64 bytes from 192.168.43.37: icmp_seq=4 ttl=64 time=242 ms
+64 bytes from 192.168.43.37: icmp_seq=5 ttl=64 time=78.6 ms
+
+--- 192.168.43.37 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4007ms
+rtt min/avg/max/mdev = 78.629/465.839/1196.777/407.217 ms, pipe 2
