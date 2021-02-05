@@ -4,6 +4,9 @@
 [![Build](https://img.shields.io/badge/Supported_OS-linux-orange.svg)]()
 [![AUR](https://img.shields.io/aur/license/yaourt.svg)]()
 
+# NOTE :- This repository is ported version of original xerosploit to install it in termux. I am not author/creator of Xerosploit.
+# If you have TermuxBlack installed then you can instal it by `apt install xerosploit`
+
 Xerosploit
 =
 Xerosploit is a penetration testing toolkit whose goal is to perform man in the middle attacks for testing purposes. It brings various modules that allow to realise efficient attacks, and also allows to carry out denial of service attacks and port scanning.
